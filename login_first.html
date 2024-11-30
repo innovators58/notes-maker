@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes & Location Tracking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: backgroundShift 12s ease infinite;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    @keyframes backgroundShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .row-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      width: 800px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: red;
+    }
+
+    .field a {
+      display: block;
+      text-align: center;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #0d0c0c;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .field a:hover {
+      background-color: #d26c14;
+      transform: translateY(-2px);
+    }
+
+    .logout-button {
+      display: block;
+      text-align: center;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background-color: #d26c14;
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #b8440d;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .row-container {
+        gap: 10px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Content -->
+  <div class="row-container">
+    <div class="title">Personal Organizer</div>
+
+    <div class="field">
+      <a href="notepage.html">Notes</a>
+    </div>
+
+    <div class="field">
+      <a href="signup.html" class="logout-button" onclick="logoutUser()">Logout</a>
+    </div>
+  </div>
+
+  <!-- JavaScript for Logout -->
+  <script>
+    function logoutUser() {
+      // Optional: Clear any user-related data (sessionStorage, cookies, etc.)
+      console.log("User logged out");
+      
+      // Redirect to the signup page
+      window.location.href = "signup.html";
+    }
+  </script>
+</body>
+</html>

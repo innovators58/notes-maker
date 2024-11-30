@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Maker and Reminder App</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: backgroundShift 12s ease infinite;
+            overflow-x: hidden;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color:rgb(26, 25, 25);
+            padding: 15px 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Enable horizontal scrolling */
+            white-space: nowrap; /* Prevent line wrapping */
+        }
+
+        .navbar a {
+            color: #f6f1f1;
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #787571;
+            border-radius: 5px;
+            transform: scale(1.1);
+        }
+
+        .lg img {
+            max-width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .main-content img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .main-content img:hover {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            color: red;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1a1919;
+            color: rgb(250, 245, 245);
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 50px;
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px;
+                flex-wrap: nowrap; /* Prevent wrapping */
+            }
+
+            .lg img {
+                margin-bottom: 0;
+            }
+
+            .main-content {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .main-content img {
+                max-width: 150px;
+            }
+
+            .navbar a {
+                font-size: 0.9rem;
+            }
+
+            .footer {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="lg">
+             <img src="1.png" alt="Logo" height="150px" width="150px">
+        </div>
+        <a href="demo.html"><b>HOME</b></a>
+        <a href="login.html"><b>LOGIN</b></a>
+        <a href="settings.html"><b>SETTINGS</b></a>
+        <a href="profile.html"><b>PROFILE</b></a>
+        <a href="explore.html"><b>EXPLORE</b></a>
+        <a href="privacy.html"><b>PRIVACY AND SECURITY</b></a>
+        <a href="contact.html"><b>CONTACT US</b></a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <img src="Notes Maker and Reminder app logo with white background.png" alt="Notes Maker and Reminder App Logo">
+        <h1><b>NOTES MAKER AND REMINDER</b></h1>
+        <h2>Welcome to your all-in-one notes maker and reminder app!</h2>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Notes Maker and Reminder App. All rights reserved.</p>
+    </div>
+</body>
+</html>

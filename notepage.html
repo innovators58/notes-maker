@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes & Reminder App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #888;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 100%;
+      width: 1100px;
+      box-sizing: border-box;
+      margin: 10px;
+    }
+    .note-input textarea {
+  width: 100%; 
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 3px solid #d41111;
+  border-radius: 5px;
+  box-sizing: border-box; 
+  resize: none; 
+}
+
+    .note-input input,
+    .note-input button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .note-input button:hover {
+      background-color: aquamarine;
+      border-radius: 70px;
+    }
+    #notes .note,
+    #private-notes .note {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      word-wrap: break-word;
+    }
+    button {
+      cursor: pointer;
+    }
+    #view-notes-btn,
+    #view-private-notes-btn,
+    #back-btn {
+      background-color: #b06cdd;
+      color: rgb(6, 6, 6);
+      border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      margin: 10px 0;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      width: 100%;
+      max-width: 200px;
+    }
+    #view-notes-btn:hover,
+    #view-private-notes-btn:hover,
+    #back-btn:hover {
+      background-color: #0cd1e3;
+    }
+    .note button {
+      color: rgb(20, 20, 20);
+      border: none;
+      border-radius: 25px;
+      padding: 8px 12px;
+      margin: 5px 2px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .note button:nth-child(1) {
+      background-color: #ff6347;
+    }
+    .note button:nth-child(1):hover {
+      background-color: #e60000;
+    }
+    .note button:nth-child(2) {
+      background-color: #0ab2f5;
+    }
+    .note button:nth-child(2):hover {
+      background-color: #4682b4;
+    }
+    @media (max-width: 768px) {
+      .container {
+        width: 100%;
+        padding: 15px;
+      }
+      .note-input textarea,
+      .note-input input,
+      .note-input button {
+        padding: 8px;
+      }
+      #view-notes-btn,
+      #view-private-notes-btn,
+      #back-btn {
+        max-width: 100%;
+      }
+    }
+    .container h1 {
+      color: red;
+    }
+    .reminder-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff6347;
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      display: none;
+      font-size: 1em;
+    }
+    .note-buttons-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
+  .note-button-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: #eaf4ff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .note-button-box:hover {
+    background-color: #cfe8ff;
+    transform: scale(1.1);
+  }
+
+  .note-button-box span {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+/* General container styling */
+.note-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+/* Textarea styling */
+textarea#note {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s;
+}
+
+textarea#note:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Input fields styling */
+input[type="datetime-local"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s;
+}
+
+input[type="datetime-local"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Placeholder text styling */
+textarea::placeholder,
+input::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+/* Password field visibility (hidden by default) */
+input#private-password {
+  display: none;
+}
+
+input#private-password.active {
+  display: block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .note-input-container {
+    padding: 0.8rem;
+  }
+
+  textarea#note,
+  input[type="datetime-local"],
+  input[type="password"] {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}
+.note-input-container {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  margin-top: 20px;
+  border: 2px solid #b06cdd;
+  border-radius: 15px;
+  background-color: #fff4f4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+textarea#note {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+textarea#note:focus {
+  border-color: #b06cdd;
+  outline: none;
+}
+
+button#note-submit-btn {
+  background-color: #0cd1e3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button#note-submit-btn:hover {
+  background-color: #0894b1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* Back button styling */
+#back-btn {
+  background-color: #f44336; /* Red background */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%; /* Full width in smaller screens */
+  max-width: 150px; /* Limit width on larger screens */
+}
+
+#back-btn:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+#back-btn:active {
+  background-color: #b71c1c; /* Even darker red on click */
+  transform: scale(0.95); /* Slight shrink effect */
+}
+
+/* Responsive styling for the back button */
+@media (max-width: 768px) {
+  #back-btn {
+    font-size: 0.9em; /* Slightly smaller text on smaller screens */
+    padding: 8px 16px;
+  }
+}
+/* Add animation to buttons on hover */
+button:hover {
+  animation: buttonHover 0.5s ease-in-out;
+}
+
+@keyframes buttonHover {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animation for text appearing with a fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container h1, .container h4 {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Add bounce effect to boxes on hover */
+.note-button-box:hover {
+  animation: boxBounce 0.5s ease-in-out;
+}
+
+@keyframes boxBounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Add a sliding animation to the note-input-container when shown */
+.note-input-container {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  margin-top: 20px;
+  border: 2px solid #b06cdd;
+  border-radius: 15px;
+  background-color: #fff4f4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation for buttons appearing */
+button {
+  animation: buttonAppear 1s ease-in-out;
+}
+
+@keyframes buttonAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Add glow effect on hover for #view-notes-btn, #view-private-notes-btn, and #back-btn */
+#view-notes-btn:hover,
+#view-private-notes-btn:hover,
+#back-btn:hover {
+  box-shadow: 0 0 15px #0cd1e3;
+  animation: pulseGlow 0.8s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    box-shadow: 0 0 10px #0cd1e3;
+  }
+  to {
+    box-shadow: 0 0 20px #0cd1e3;
+  }
+}
+
+/* General reset for margin and padding */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* Light background for better aesthetics */
+  color: #333;
+}
+
+/* Center content vertically and horizontally */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  margin: auto;
+}
+
+/* Add spacing between titles */
+.container h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #b06cdd; /* Purple accent */
+}
+
+.container h4 {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+/* Buttons styling */
+
+
+/* Note buttons and boxes */
+.note-button-box {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.note-input-container {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  margin-top: 2rem;
+  border: 2px solid #b06cdd;
+  border-radius: 15px;
+  background-color: #fff4f4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add max-width for better alignment on larger screens */
+.container {
+  max-width: 800px;
+  width: 90%;
+  margin: auto;
+}
+
+/* Full-screen alignment for better experience */
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Glow effect for specific buttons */
+#view-notes-btn:hover,
+#view-private-notes-btn:hover,
+#back-btn:hover {
+  box-shadow: 0 0 15px #0cd1e3;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.3s ease;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="theme">
+  <div class="container">
+    <h1>Notes & Reminders</h1>
+    <h4>Here You Can Add Your Notes & Make Them Private If You Want 👍</h4>
+    <div class="note-buttons-container">
+      <div class="note-button-box" onclick="showNoteInput(false)">
+        <span>Add Note</span>
+      </div>
+      <div class="note-button-box" onclick="showNoteInput(true)">
+        <span>Add Private Note</span>
+      </div>
+    </div>
+    
+    <div id="note-input-container" class="note-input-container" style="display: none;">
+      <textarea id="note" placeholder="Write your note here..."></textarea>
+      <input type="datetime-local" id="reminder" />
+      <input type="password" id="private-password" placeholder="Enter password for private note" style="display: none;" />
+      <button id="note-submit-btn" onclick="addNote()">Add Note</button>
+      <button id="back-btn" onclick="hideNoteInput()">Back</button>
+
+    </div>
+    
+    <button id="view-notes-btn" onclick="toggleNotes()"><b>View Notes</b></button>
+    <button id="view-private-notes-btn" onclick="showPrivateNotes()"><b>View Private Notes</b></button>
+    <a href="login_first.html"><button id="back-btn" onclick="hideAllSections()"><b>Back</b></button></a>
+    <div id="notes" style="display: none"></div>
+    <div id="private-notes" style="display: none"></div>
+  </div>
+
+  <div id="reminder-popup" class="reminder-popup"></div>
+</div>
+  <script>
+    let notes = localStorage.getItem("notes") ? JSON.parse(localStorage.getItem("notes")) : [];
+    let privateNotes = localStorage.getItem("privateNotes") ? JSON.parse(localStorage.getItem("privateNotes")) : [];
+    let currentNoteIndex = null;
+    let isUpdatingPrivate = false;
+
+    const buzzerSound = new Audio('buzzer.mp3.wav'); 
+
+    function addNote() {
+      const noteText = document.getElementById("note").value;
+      const reminderTime = document.getElementById("reminder").value;
+
+      if (noteText === "" || reminderTime === "") {
+        alert("Please fill out both fields");
+        return;
+      }
+
+      const note = {
+        text: noteText,
+        reminder: new Date(reminderTime).getTime(),
+      };
+
+      if (currentNoteIndex !== null && !isUpdatingPrivate) {
+        notes[currentNoteIndex] = note;
+        currentNoteIndex = null;
+      } else {
+        notes.push(note);
+      }
+
+      localStorage.setItem("notes", JSON.stringify(notes));
+      renderNotes();
+      setReminder(note);
+
+      document.getElementById("note").value = "";
+      document.getElementById("reminder").value = "";
+    }
+
+    function addPrivateNote() {
+      const noteText = document.getElementById("note").value;
+      const reminderTime = document.getElementById("reminder").value;
+      const password = document.getElementById("private-password").value;
+
+      if (noteText === "" || reminderTime === "" || password === "") {
+        alert("Please fill out all fields");
+        return;
+      }
+
+      const note = {
+        text: noteText,
+        reminder: new Date(reminderTime).getTime(),
+        password: password,
+      };
+
+      if (currentNoteIndex !== null && isUpdatingPrivate) {
+        privateNotes[currentNoteIndex] = note;
+        currentNoteIndex = null;
+        isUpdatingPrivate = false;
+      } else {
+        privateNotes.push(note);
+      }
+
+      localStorage.setItem("privateNotes", JSON.stringify(privateNotes));
+      renderPrivateNotes();
+      setReminder(note, true);
+
+      document.getElementById("note").value = "";
+      document.getElementById("reminder").value = "";
+      document.getElementById("private-password").value = "";
+    }
+
+    function setReminder(note, isPrivate = false) {
+      const now = new Date().getTime();
+      const timeToReminder = note.reminder - now;
+
+      if (timeToReminder > 0) {
+        setTimeout(() => {
+          buzzerSound.play(); 
+          showReminderPopup(note.text);
+        }, timeToReminder);
+      }
+    }
+
+    function showReminderPopup(message) {
+      const popup = document.getElementById("reminder-popup");
+      popup.innerText = `Reminder: ${message}`;
+      popup.style.display = "block";
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 5000); 
+    }
+
+    function renderNotes() {
+      const notesContainer = document.getElementById("notes");
+      notesContainer.innerHTML = "";
+
+      if (notes.length === 0) {
+        notesContainer.innerHTML = "<p>No notes available.</p>";
+      } else {
+        notes.forEach((note, index) => {
+          const noteElement = document.createElement("div");
+          noteElement.classList.add("note");
+          noteElement.innerHTML = ` 
+            <p>${note.text}</p>
+            <small>Reminder: ${new Date(note.reminder).toLocaleString()}</small>
+            <button onclick="deleteNote(${index})">Delete Note</button>
+            <button onclick="prepareUpdate(${index})">Update Note</button>
+          `;
+          notesContainer.appendChild(noteElement);
+        });
+      }
+    }
+    function renderPrivateNotes() {
+  const privateNotesContainer = document.getElementById("private-notes");
+  privateNotesContainer.innerHTML = "";
+
+  if (privateNotes.length === 0) {
+    privateNotesContainer.innerHTML = "<p>No private notes available.</p>";
+  } else {
+    privateNotes.forEach((note, index) => {
+      const noteElement = document.createElement("div");
+      noteElement.classList.add("note");
+
+      const passwordPrompt = document.createElement("p");
+      passwordPrompt.innerText = "Enter password to view this note:";
+      const passwordInput = document.createElement("input");
+      passwordInput.type = "password";
+      const passwordButton = document.createElement("button");
+      passwordButton.innerText = "Submit";
+
+      passwordButton.onclick = () => {
+        if (passwordInput.value === note.password) {
+          noteElement.innerHTML = `
+            <p>${note.text}</p>
+            <small>Reminder: ${new Date(note.reminder).toLocaleString()}</small>
+            <button onclick="deleteNote(${index}, true)">Delete Private Note</button>
+            <button onclick="prepareUpdate(${index}, true)">Update Private Note</button>
+          `;
+        } else {
+          alert("Incorrect password!");
+        }
+      };
+
+      noteElement.appendChild(passwordPrompt);
+      noteElement.appendChild(passwordInput);
+      noteElement.appendChild(passwordButton);
+      privateNotesContainer.appendChild(noteElement);
+    });
+  }
+}
+
+
+    function deleteNote(index, isPrivate = false) {
+      if (isPrivate) {
+        privateNotes.splice(index, 1);
+        localStorage.setItem("privateNotes", JSON.stringify(privateNotes));
+        renderPrivateNotes();
+      } else {
+        notes.splice(index, 1);
+        localStorage.setItem("notes", JSON.stringify(notes));
+        renderNotes();
+      }
+    }
+
+    function prepareUpdate(index, isPrivate = false) {
+      if (isPrivate) {
+        document.getElementById("note").value = privateNotes[index].text;
+        document.getElementById("reminder").value = new Date(privateNotes[index].reminder).toISOString().slice(0, 16);
+        currentNoteIndex = index;
+        isUpdatingPrivate = true;
+      } else {
+        document.getElementById("note").value = notes[index].text;
+        document.getElementById("reminder").value = new Date(notes[index].reminder).toISOString().slice(0, 16);
+        currentNoteIndex = index;
+      }
+    }
+
+    function toggleNotes() {
+  const notesContainer = document.getElementById("notes");
+  const privateNotesContainer = document.getElementById("private-notes");
+
+  renderNotes(); 
+
+  if (notesContainer.style.display === "none") {
+    notesContainer.style.display = "block";
+    privateNotesContainer.style.display = "none";
+    document.getElementById("view-notes-btn").innerText = "Hide Notes";
+    document.getElementById("view-private-notes-btn").innerText = "View Private Notes";
+  } else {
+    notesContainer.style.display = "none";
+    document.getElementById("view-notes-btn").innerText = "View Notes";
+  }
+}
+function showPrivateNotes() {
+  const privateNotesContainer = document.getElementById("private-notes");
+  const notesContainer = document.getElementById("notes");
+  const privateNotesButton = document.getElementById("view-private-notes-btn");
+  const notesButton = document.getElementById("view-notes-btn");
+
+  notesContainer.style.display = "none";
+  notesButton.innerText = "View Notes";
+
+  if (privateNotesContainer.style.display === "block") {
+    privateNotesContainer.style.display = "none";
+    privateNotesButton.innerText = "View Private Notes";
+  } else {
+    privateNotesContainer.innerHTML = "";
+
+    const password = prompt("Enter password to view a private note:");
+
+    if (password) {
+      const matchedNotes = privateNotes.filter(note => note.password === password);
+
+      if (matchedNotes.length > 0) {
+        matchedNotes.forEach(note => {
+          const noteElement = document.createElement("div");
+          noteElement.classList.add("note");
+          noteElement.innerHTML = `
+            <p>${note.text}</p>
+            <small>Reminder: ${new Date(note.reminder).toLocaleString()}</small>
+            <button onclick="deleteNoteByPassword('${note.password}')">Delete Private Note</button>
+            <button onclick="prepareUpdateByPassword('${note.password}')">Update Private Note</button>
+          `;
+          privateNotesContainer.appendChild(noteElement);
+        });
+        privateNotesContainer.style.display = "block";
+        privateNotesButton.innerText = "Hide Private Notes";
+      } else {
+        alert("No private note found for the entered password.");
+        privateNotesContainer.style.display = "none";
+      }
+    } else {
+      privateNotesContainer.style.display = "none";
+    }
+  }
+}
+
+function deleteNoteByPassword(password) {
+  const index = privateNotes.findIndex(note => note.password === password);
+  if (index !== -1) {
+    privateNotes.splice(index, 1);
+    localStorage.setItem("privateNotes", JSON.stringify(privateNotes));
+    showPrivateNotes(); 
+  }
+}
+
+function prepareUpdateByPassword(password) {
+  const index = privateNotes.findIndex(note => note.password === password);
+  if (index !== -1) {
+    document.getElementById("note").value = privateNotes[index].text;
+    document.getElementById("reminder").value = new Date(privateNotes[index].reminder).toISOString().slice(0, 16);
+    currentNoteIndex = index;
+    isUpdatingPrivate = true;
+  }
+}
+
+
+
+    function hideAllSections() {
+      const notesContainer = document.getElementById("notes");
+      const privateNotesContainer = document.getElementById("private-notes");
+      notesContainer.style.display = "none";
+      privateNotesContainer.style.display = "none";
+    }
+    function showNoteInput(isPrivate) {
+    const noteInputContainer = document.getElementById("note-input-container");
+    const privatePasswordInput = document.getElementById("private-password");
+    const noteSubmitBtn = document.getElementById("note-submit-btn");
+
+    // Display the note input container
+    noteInputContainer.style.display = "block";
+
+    if (isPrivate) {
+      privatePasswordInput.style.display = "block";
+      noteSubmitBtn.setAttribute("onclick", "addPrivateNote()");
+      noteSubmitBtn.innerText = "Add Private Note";
+    } else {
+      privatePasswordInput.style.display = "none";
+      noteSubmitBtn.setAttribute("onclick", "addNote()");
+      noteSubmitBtn.innerText = "Add Note";
+    }
+  }
+  function showNoteInput(isPrivate) {
+  const noteInputContainer = document.getElementById("note-input-container");
+  const privatePasswordInput = document.getElementById("private-password");
+  const noteSubmitBtn = document.getElementById("note-submit-btn");
+
+  // Display the note input container
+  noteInputContainer.style.display = "flex";
+
+  if (isPrivate) {
+    privatePasswordInput.style.display = "block";
+    noteSubmitBtn.setAttribute("onclick", "addPrivateNote()");
+    noteSubmitBtn.innerText = "Add Private Note";
+  } else {
+    privatePasswordInput.style.display = "none";
+    noteSubmitBtn.setAttribute("onclick", "addNote()");
+    noteSubmitBtn.innerText = "Add Note";
+  }
+}
+
+// Optionally, add a close button for better usability
+function hideNoteInput() {
+  const noteInputContainer = document.getElementById("note-input-container");
+  noteInputContainer.style.display = "none";
+}
+function hideNoteInput() {
+  const noteInputContainer = document.getElementById("note-input-container");
+  noteInputContainer.style.display = "none";
+}
+
+  </script>
+</body>
+</html>

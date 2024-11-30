@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup with Face Recognition</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #89f7fe, #66a6ff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .signup-container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+    }
+
+    .signup-container h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .signup-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .signup-container button {
+      background: #66a6ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .signup-container button:hover {
+      background: #4889d7;
+    }
+
+    .signup-container .back-btn {
+      background: #f44336;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .signup-container .back-btn:hover {
+      background: #d32f2f;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .video-container {
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <h1>Sign up with Face Recognition</h1>
+    <form id="signup-form">
+      <input type="text" placeholder="Username" id="username" required>
+      <input type="email" placeholder="Email" id="email" required>
+      <input type="password" placeholder="Password" id="password" required>
+      <button type="submit">Sign up</button>
+    </form>
+
+    <div class="video-container">
+      <video id="video" width="400" height="300" autoplay muted></video>
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <div id="message"></div>
+    <a href="login.html"><button class="back-btn">Back to Login</button></a>
+  </div>
+
+  <script src="/project/models/dist/face-api.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRClxDVakAbvdj198P3PMoghD-wfWQphI",
+      authDomain: "notes-maker-11046.firebaseapp.com",
+      databaseURL: "https://notes-maker-11046-default-rtdb.firebaseio.com",
+      projectId: "notes-maker-11046",
+      storageBucket: "notes-maker-11046.appspot.com",
+      messagingSenderId: "466104643742",
+      appId: "1:466104643742:web:4e01b00ebe399be2ee4b8f",
+      measurementId: "G-4DY5GENV8T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const messageDiv = document.getElementById("message");
+
+    const showMessage = (text, isError = false) => {
+      messageDiv.textContent = text;
+      messageDiv.style.color = isError ? "red" : "green";
+      messageDiv.style.display = "block";
+
+      setTimeout(() => {
+        messageDiv.style.display = "none";
+      }, 3000);
+    };
+
+    async function startVideo() {
+      const video = document.getElementById('video');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error("Error accessing webcam:", err);
+        showMessage("Webcam access is required for face recognition.", true);
+      }
+    }
+
+    const MODEL_URL = '/project/models/weights';
+    Promise.all([
+    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+    ]).then(startVideo);
+
+    async function registerFaceAndSignup(username) {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+
+      const displaySize = { width: video.width, height: video.height };
+      faceapi.matchDimensions(canvas, displaySize);
+
+      const detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+      if (!detections) {
+        showMessage("No face detected. Please try again.", true);
+        return false;
+      }
+
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      faceapi.draw.drawDetections(canvas, resizedDetections);
+      faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+
+      try {
+        await set(ref(db, `faceDescriptors/${username}`), Array.from(detections.descriptor));
+        return true;
+      } catch (error) {
+        console.error("Error saving face descriptor:", error);
+        showMessage("Failed to register face.", true);
+        return false;
+      }
+    }
+
+    document.getElementById("signup-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!username || !email || !password) {
+        showMessage("Please fill in all fields.", true);
+        return;
+      }
+
+      const faceRegistered = await registerFaceAndSignup(username);
+
+      if (faceRegistered) {
+        try {
+          await set(ref(db, `users/${username}`), { username, email, password });
+          showMessage("Signup successful with face recognition!", false);
+        } catch (error) {
+          console.error("Error during signup:", error);
+          showMessage("Failed to sign up. Please try again.", true);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

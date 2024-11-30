@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Notes Maker and Reminder App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: backgroundShift 12s ease infinite;
+            color: #333;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(26, 26, 25, 0.85);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: rgb(253, 249, 249);
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #d26c14;
+            border-radius: 5px;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .navbar a {
+                width: 100%;
+                text-align: left;
+            }
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .main-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .profile-container label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+
+        .profile-container input[type="text"],
+        .profile-container input[type="email"],
+        .profile-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-container input:focus {
+            border-color: #666;
+            box-shadow: 0px 0px 5px rgba(100, 100, 100, 0.5);
+        }
+
+        .profile-container img {
+            max-width: 150px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+        }
+
+        .profile-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0b0b0b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .profile-container button:hover {
+            background-color: #d26c14;
+            transform: scale(1.05);
+        }
+
+        .message {
+            color: green;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: rgba(26, 26, 25, 0.9);
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 30px;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 20px;
+            }
+
+            .footer {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .footer {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="demo.html"><b>HOME</b></a>
+        <a href="login.html"><b>LOGIN</b></a>
+        <a href="settings.html"><b>SETTINGS</b></a>
+        <a href="profile.html"><b>PROFILE</b></a>
+        <a href="explore.html"><b>EXPLORE</b></a>
+        <a href="privacy.html"><b>PRIVACY AND SECURITY</b></a>
+        <a href="contact.html"><b>CONTACT US</b></a>
+    </div>
+
+    <div class="main-content">
+        <h2>PROFILE</h2>
+        <div class="profile-container">
+            <div id="messageContainer"></div>
+
+            <form action="submit_login.php" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                
+                <button type="submit">Create Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Notes Maker and Reminder App. All rights reserved.</p>
+    </div>
+
+    <script>
+        function getParameterByName(name) {
+            const url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                  results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        const message = getParameterByName('message');
+        if (message) {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.textContent = message;
+            messageContainer.className = message.includes("Error") ? "error" : "message";
+        }
+    </script>
+</body>
+</html>

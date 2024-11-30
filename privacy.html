@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy and Security - Notes Maker and Reminder App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: backgroundShift 12s ease infinite;
+            color: #333;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navbar styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(15, 16, 16, 0.85);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: rgb(253, 246, 246);
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #d26c14;
+            border-radius: 5px;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .navbar a {
+                width: 100%;
+                text-align: left;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .main-content h2 {
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        /* Privacy Container */
+        .privacy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .privacy-container h3 {
+            margin-top: 20px;
+            color: #d26c14;
+        }
+
+        .privacy-container p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: rgba(6, 6, 6, 0.85);
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 1rem;
+            margin-top: 30px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 10px;
+            }
+            .privacy-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="demo.html"><b>HOME</b></a>
+        <a href="login.html"><b>LOGIN</b></a>
+        <a href="settings.html"><b>SETTINGS</b></a>
+        <a href="profile.html"><b>PROFILE</b></a>
+        <a href="explore.html"><b>EXPLORE</b></a>
+        <a href="privacy.html"><b>PRIVACY AND SECURITY</b></a>
+        <a href="contact.html"><b>CONTACT US</b></a>
+    </div>
+
+    <div class="main-content">
+        <h2>PRIVACY AND SECURITY</h2>
+        <div class="privacy-container">
+            <h3>Introduction</h3>
+            <p>Welcome to the Privacy and Security page of the Notes Maker and Reminder App. Your privacy and data security are our top priorities.</p>
+
+            <h3>Data Collection</h3>
+            <p>We collect minimal data necessary to provide you with the best experience. This includes your account information, notes, and reminders. We do not share your data with third parties without your consent.</p>
+
+            <h3>Data Storage</h3>
+            <p>All your data is securely stored on our servers with encryption to protect it from unauthorized access. We ensure regular backups and apply the best security practices.</p>
+
+            <h3>Data Usage</h3>
+            <p>Your data is used solely for the purpose of improving your experience with the app. We use aggregated data to enhance our services and never sell your data to third parties.</p>
+
+            <h3>Security Measures</h3>
+            <p>We employ industry-standard security measures, including SSL encryption and secure authentication processes, to safeguard your information.</p>
+
+            <h3>User Rights</h3>
+            <p>You have the right to access, modify, and delete your data at any time. If you have any concerns or requests regarding your data, please contact our support team.</p>
+
+            <h3>Contact Us</h3>
+            <p>If you have any questions or concerns about your privacy and data security, feel free to contact us at [support@notesapp.com].</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Notes Maker and Reminder App. All rights reserved.</p>
+    </div>
+</body>
+</html>

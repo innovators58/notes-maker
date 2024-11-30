@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Notes Maker and Reminder App</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: backgroundShift 12s ease infinite;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: rgba(26, 26, 25, 0.85);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .navbar a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: rgb(253, 249, 249);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .navbar a:hover {
+            background-color: #d26c14;
+            border-radius: 5px;
+            transform: scale(1.1);
+        }
+
+        /* Responsive navbar */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .navbar a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .settings-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .settings-container label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .settings-container input,
+        .settings-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .settings-container input:focus,
+        .settings-container select:focus {
+            border-color: #666;
+            box-shadow: 0px 0px 5px rgba(100, 100, 100, 0.5);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1a1919;
+            color: rgb(250, 245, 245);
+            text-align: center;
+            padding: 20px 10px;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            margin-top: 50px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .settings-container {
+                padding: 20px;
+                margin: 30px auto;
+            }
+
+            .settings-container label {
+                font-size: 0.9rem;
+            }
+
+            .settings-container input,
+            .settings-container select {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-container label {
+                font-size: 0.8rem;
+            }
+
+            .settings-container input,
+            .settings-container select {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+
+            .footer {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="demo.html"><b>HOME</b></a>
+        <a href="login.html"><b>LOGIN</b></a>
+        <a href="settings.html"><b>SETTINGS</b></a>
+        <a href="profile.html"><b>PROFILE</b></a>
+        <a href="explore.html"><b>EXPLORE</b></a>
+        <a href="privacy.html"><b>PRIVACY AND SECURITY</b></a>
+        <a href="contact.html"><b>CONTACT US</b></a>
+    </div>
+    <div class="main-content">
+        <h2>SETTINGS</h2>
+        <div class="settings-container">
+
+            <label for="notifications">Notification Preferences:</label>
+            <select id="notifications">
+                <option value="all">All Notifications</option>
+                <option value="important">Important Only</option>
+                <option value="none">None</option>
+            </select>
+
+            <label for="theme">Theme:</label>
+            <select id="theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Notes Maker and Reminder App. All rights reserved.</p>
+    </div>
+
+    <script>
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.getElementById('theme').value = savedTheme;
+            applyTheme(savedTheme);
+        }
+
+        function applyTheme(theme) {
+            document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+            localStorage.setItem('theme', theme);
+        }
+
+        document.getElementById('theme').addEventListener('change', function() {
+            applyTheme(this.value);
+        });
+
+        loadTheme();
+    </script>
+</body>
+</html>
